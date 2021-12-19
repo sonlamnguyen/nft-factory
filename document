@@ -1,0 +1,18 @@
+Các function trong NFT 
+
+1. new_default_meta: init nft theo default meta data
+2. new : hàm init nhưng cần phải truyền default meta data vào
+3. nft_mint: hàm mint ra NFT token(hay tạo NFT token)
+4. nft_metadata: hàm get meta data của NFT
+5. nft_transfer: hàm transfer NFT token nếu là owner thì ko cần token được approved, 
+nếu account khác owner sẽ cần được approved trước khi được transfer
+6. nft_transfer_call: hàm transfer nhưng trả về 1 promise cho phía gọi
+7. nft_token: get thông tin của 1 NFT token
+8. nft_approve: approved token được phép transfer
+9. nft_is_approved: check NFT có được approved cho account sở hữu hay chưa
+10. nft_revoke: 
+11. nft_revoke_all:
+12. nft_total_supply: lấy total supply của token hiện tại
+13. nft_tokens: lấy tất cả meta data của NFT tokens
+14. nft_supply_for_owner: lấy total NFT theo account
+15. nft_tokens_for_owner: lây metadata của tokens theo account

@@ -1,0 +1,78 @@
+
+1. Build:
+    ./build.sh
+
+2. Run test:
+    cargo test -- --nocapture
+
+3. Login NEAR
+    near login
+
+4. Set ID account
+    -> create a sub account
+    near create-account deploy1.lam-test2.testnet --masterAccount lam-test2.testnet --initialBalance 10
+    near create-account alice1.lam-test2.testnet --masterAccount lam-test2.testnet --initialBalance 10
+    near create-account bob1.lam-test2.testnet --masterAccount lam-test2.testnet --initialBalance 10
+
+    ID=lam-test2.testnet
+    ID_DEPLOY=deploy1.lam-test2.testnet
+    ID_ALICE=alice1.lam-test2.testnet
+    ID_BOB=bob1.lam-test2.testnet
+
+    echo $ID_DEPLOY
+
+5. Deploy contract:
+    near deploy --wasmFile res/non_fungible_token.wasm --accountId $ID_DEPLOY
+
+6. call function new_default_meta
+    near call $ID_DEPLOY new_default_meta '{"owner_id": "'$ID_DEPLOY'"}' --accountId $ID_DEPLOY
+
+7. View nft metadata
+    near view $ID_DEPLOY nft_metadata
+
+8. Mint nft
+    near call $ID_DEPLOY nft_mint '{"token_id": "3", "token_owner_id": "'$ID_DEPLOY'", "token_metadata": { "title": "Olympus Mons", "description": "Tallest mountain in charted solar system","media": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Olympus_Mons_alt.jpg/1024px-Olympus_Mons_alt.jpg", "copies": 1,"types": 99, "reward": 5}}' --accountId $ID_DEPLOY --deposit 0.01
+
+9. Check NFT token deploy account:
+    near view $ID_DEPLOY nft_tokens_for_owner '{"account_id": "'$ID_DEPLOY'"}'
+
+9. Checking Alice's account for tokens:
+    
+    near view $ID_DEPLOY nft_tokens_for_owner '{"account_id": "'$ID_ALICE'"}'
+
+11. Then we'll transfer over the NFT into Alice's account. Exactly 1 yoctoNEAR of deposit should be attached:
+    near call $ID_DEPLOY nft_transfer '{"token_id": "1", "receiver_id": "'$ID_ALICE'", "memo": "transfer ownership"}' --accountId $ID_DEPLOY --depositYocto 1
+
+12. get total supply NFT tokens:   
+    near view $ID_DEPLOY nft_total_supply
+
+13. get metadata of NFT tokens:
+    near view $ID_DEPLOY nft_tokens
+    near view $ID_DEPLOY nft_token '{"token_id": "1"}'
+
+14. Get nft supply for owner
+    near view $ID_DEPLOY nft_supply_for_owner '{"account_id": "'$ID_DEPLOY'"}'
+
+
+15. Approved nft tokens:
+
+    near call $ID_DEPLOY nft_approve '{"token_id": "1", "account_id": "'$ID_ALICE'"}' --accountId $ID_ALICE --deposit 1
+
+    near call $ID_DEPLOY nft_approve '{"token_id": "2", "account_id": "'$ID_DEPLOY'"}' --accountId $ID_DEPLOY --deposit 0.01
+
+16. Check nft is approved:
+    near view $ID_DEPLOY nft_is_approved '{"token_id": "1", "approved_account_id": "'$ID_ALICE'"}'
+
+    near view $ID_DEPLOY nft_is_approved '{"token_id": "2", "approved_account_id": "'$ID_DEPLOY'"}'
+
+17. Transfer from Alice to Bob
+    near call $ID_DEPLOY nft_transfer '{"token_id": "1", "receiver_id": "'$ID_BOB'", "memo": "transfer ownership"}' --accountId $ID_ALICE --deposit 0.000000000000000000000001
+
+18. Transfer from Bob to Deploy account
+    near call $ID_DEPLOY nft_transfer '{"token_id": "1", "receiver_id": "'$ID_DEPLOY'", "memo": "transfer ownership"}' --accountId $ID_BOB --depositYocto 1
+
+
+
+
+
+
