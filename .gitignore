@@ -13,3 +13,4 @@ neardev
 
 .idea
 .vscode
+**/*.wasm

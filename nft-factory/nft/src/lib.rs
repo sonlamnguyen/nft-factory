@@ -137,6 +137,8 @@ mod tests {
             media: None,
             media_hash: None,
             copies: Some(1u64),
+            types: Some(1u64),
+            reward: Some(5u64),
             issued_at: None,
             expires_at: None,
             starts_at: None,
